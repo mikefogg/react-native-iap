@@ -485,6 +485,7 @@ RCT_EXPORT_METHOD(getPendingTransactions:(RCTPromiseResolveBlock)resolve
 
     NSString* localizedPrice = [formatter stringFromNumber:product.price];
     NSString* introductoryPrice = localizedPrice;
+    NSString* localizedPricePerMonth = @"";
 
     NSString* introductoryPricePaymentMode = @"";
     NSString* introductoryPriceNumberOfPeriods = @"";
@@ -503,6 +504,8 @@ RCT_EXPORT_METHOD(getPendingTransactions:(RCTPromiseResolveBlock)resolve
 
         if (unit == SKProductPeriodUnitYear) {
             periodUnitIOS = @"YEAR";
+            NSDecimalNumber *monthCount = [[NSDecimalNumber alloc] initWithInt:12];
+            localizedPricePerMonth = [formatter stringFromNumber:[product.price decimalNumberByDividingBy:monthCount]];
         } else if (unit == SKProductPeriodUnitMonth) {
             periodUnitIOS = @"MONTH";
         } else if (unit == SKProductPeriodUnitWeek) {
@@ -579,6 +582,7 @@ RCT_EXPORT_METHOD(getPendingTransactions:(RCTPromiseResolveBlock)resolve
                          product.localizedTitle ? product.localizedTitle : @"", @"title",
                          product.localizedDescription ? product.localizedDescription : @"", @"description",
                          localizedPrice, @"localizedPrice",
+                         localizedPricePerMonth, @"localizedPricePerMonth",
                          periodNumberIOS, @"subscriptionPeriodNumberIOS",
                          periodUnitIOS, @"subscriptionPeriodUnitIOS",
                          introductoryPrice, @"introductoryPrice",
